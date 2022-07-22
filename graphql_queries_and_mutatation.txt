@@ -218,3 +218,47 @@ query movies{
     }
   }
 }
+
+# ---------------------------------------------------@ user register @----------------------------------------------------
+mutation{
+  register(email:"sj@gmail.com",username:"sj9431", password1:"demo1234", password2:"demo1234"){
+    success
+    errors
+    token
+  }
+}
+
+# ---------------------------------------------------@ user verification @----------------------------------------------------
+mutation{
+ 	verifyAccount(token:"eyJ1c2VybmFtZSI6InNqOTQzMSIsImFjdGlvbiI6ImFjdGl2YXRpb24ifQ:1oEvOV:T4YidFXsd968Ga8txJyWpQffnBnrLQa9KGXkL5YdX8I"){
+    success
+    errors
+  }
+}
+
+# ---------------------------------------------------@ user login @----------------------------------------------------
+mutation{
+  tokenAuth(email:"admin@email.com",password:"demo1234"){
+    success
+    errors
+    token
+    user{
+      id
+      verified
+    }
+  }
+}
+
+# ---------------------------------------------------@ user resend activation @----------------------------------------------------
+mutation{
+  resendActivationEmail(email:"admin@email.com"){
+    success
+  }
+}
+
+# ---------------------------------------------------@ user update @----------------------------------------------------
+mutation{
+  updateAccount(firstName:"admin", lastName:"admin"){
+    success
+  }
+}

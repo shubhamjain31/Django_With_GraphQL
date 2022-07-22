@@ -1,6 +1,9 @@
-from email import message
+from atexit import register
 import graphene
 from .types import *
+
+from graphql_auth.schema import MeQuery
+from graphql_auth import mutations
 
 # create mutations for add post
 class AddPost(graphene.Mutation):
@@ -261,7 +264,6 @@ class DeleteMovie(graphene.Mutation):
         movie_instance.delete()
         return DeleteMovie(status=status)
 
-
 # create the mutation type
 class Mutation(graphene.ObjectType):
     add_post        = AddPost.Field()
@@ -278,3 +280,9 @@ class Mutation(graphene.ObjectType):
     delete_author   = DeleteAuthor.Field()
     delete_actor    = DeleteActor.Field()
     delete_movie    = DeleteMovie.Field()
+
+    register        = mutations.Register.Field()
+    verify_account  = mutations.VerifyAccount.Field()
+    token_auth      = mutations.ObtainJSONWebToken.Field()
+    update_account  = mutations.UpdateAccount.Field()
+    resend_activation_email = mutations.ResendActivationEmail.Field()
