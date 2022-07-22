@@ -1,0 +1,220 @@
+# ------------------------------------------------------------@ add data for post @----------------------------------------------------
+mutation addPost($input: PostInput!) {
+  addPost(input: $input) {
+   post { 
+      id
+      title
+      content
+      author {
+        name
+      }
+    }
+  }
+}
+
+# ------------------------------------------------------------@ update data for post @----------------------------------------------------
+mutation updatePost {
+  updatePost(id: 7, input: {
+    title: "change again",
+    content: "yoboy",
+    author: "2"
+    
+  }) {
+    status
+  }
+}
+
+# ------------------------------------------------------------@ delete data for post @----------------------------------------------------
+mutation deletePost {
+  deletePost(id: 9) {
+    status
+    message
+  }
+}
+
+
+# ------------------------------------------------------------@ post variable @----------------------------------------------------
+{
+  "input": {
+    "title": "My title",
+    "content": "demo",
+    "author": "1"
+  }
+}
+
+# ------------------------------------------------------------@ get data @----------------------------------------------------
+{
+  feed {
+    title
+    createdAt
+    content
+    author {
+      name
+      biodata
+      posts {
+        title
+      }
+    }
+  }
+}
+
+# ------------------------------------------------------@ add data for author @----------------------------------------------------
+mutation addAuthor($input: AuthorInput!) {
+  addAuthor(input: $input) {
+   # post is the output field defined in AddPost mutation 
+    author{
+      id
+      name
+      biodata
+    }
+  }
+}
+
+# -----------------------------------------------------@ update data for author @------------------------------------------------
+mutation updateAuthor {
+  updateAuthor(id: 5, input: {
+    name: "change again",
+    biodata: "yoboy"
+    
+  }) {
+    status
+  }
+}
+
+# -----------------------------------------------------@ delete data for author @-----------------------------------------------
+mutation deleteAuthor {
+  deleteAuthor(id: 6) {
+    status
+    message
+  }
+}
+
+# -----------------------------------------------------@ author variable @----------------------------------------------------
+{
+  "input": {
+    "name": "how",
+    "biodata": "This is a movie content"
+  }
+}
+
+# ------------------------------------------------------------@ add data for actor @----------------------------------------------------
+mutation createActor {
+  createActor(input: {
+    name: ""
+  }) {
+    status
+    actor {
+      id
+      name
+      createdAt
+    }
+  }
+}
+
+# ------------------------------------------------------------@ update data for actor @----------------------------------------------------
+mutation updateActor {
+  updateActor(id: 3, input: {
+    name: "yes Away",
+    
+  }) {
+    status
+  }
+}
+
+# ------------------------------------------------------------@ delete data for actor @----------------------------------------------------
+mutation deleteActor {
+  deleteActor(id: 6) {
+    status
+    message
+  }
+}
+
+# --------------------------------------------------------@ get data for actor @-------------------------------------------------------
+query actors{
+  actors{
+    id
+    name
+    createdAt
+  }
+}
+
+# ------------------------------------------------------------@ add data for movie @----------------------------------------------------
+mutation createMovie {
+  createMovie(input: {
+    title: "title",
+    actors: [
+      {
+        id: 5
+        name: ""
+      },
+      {
+        id: 6
+        name: ""
+      }
+    ]
+    year: 1999
+  }) {
+    status
+    movie{
+      id
+      title
+      actors {
+        id
+        name
+      }
+      year
+    }
+  }
+}
+
+# ---------------------------------------------------@ update data for movie @----------------------------------------------------
+mutation updateMovie {
+  updateMovie(id: 2, input: {
+    title: "change12",
+    actors: [
+      {
+        id: 1
+        name: ""
+      },
+      {
+        id: 3
+        name: ""
+      }
+    ]
+    year: 2000
+  }) {
+    status
+    movie{
+      id
+      title
+      actors {
+        id
+        name
+      }
+      year
+    }
+  }
+}
+
+# ---------------------------------------------------@ delete data for movie @----------------------------------------------------
+mutation deleteMovie {
+  deleteMovie(id: 2) {
+    status
+    message
+  }
+}
+
+# ---------------------------------------------------@ get data for movie @----------------------------------------------------
+query movies{
+  movies{
+    id
+    title
+    year
+    createdAt
+    actors{
+      id
+      name
+      createdAt
+    }
+  }
+}
