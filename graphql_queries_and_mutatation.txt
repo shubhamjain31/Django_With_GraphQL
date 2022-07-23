@@ -219,7 +219,17 @@ query movies{
   }
 }
 
-# ---------------------------------------------------@ user register @----------------------------------------------------
+# ---------------------------------------------------@ create user @----------------------------------------------------
+mutation{
+  createUser(input: {email:"shubham31@gmail.com",username:"shubham9431", password:"demo1234"}){
+    user{
+    id
+    email
+  }
+}
+}
+
+# ---------------------------------------------------@ user register(inbuilt func) @----------------------------------------------------
 mutation{
   register(email:"sj@gmail.com",username:"sj9431", password1:"demo1234", password2:"demo1234"){
     success

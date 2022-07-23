@@ -18,11 +18,10 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 
-from authentication.views import redirect_view, PrivateGraphQLView
+from authentication.views import redirect_view
 
 urlpatterns = [
     path('', redirect_view, name='index'),
     path('admin/', admin.site.urls),
-    path('graphql', csrf_exempt(PrivateGraphQLView.as_view(graphiql=True)))
-    # path('graphql', csrf_exempt(GraphQLView.as_view(graphiql=True)))
+    path('graphql', csrf_exempt(GraphQLView.as_view(graphiql=True)))
 ]

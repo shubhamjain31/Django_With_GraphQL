@@ -1,9 +1,30 @@
-from atexit import register
+from cmath import inf
 import graphene
 from .types import *
 
 from graphql_auth.schema import MeQuery
 from graphql_auth import mutations
+from graphql_jwt.decorators import login_required
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+# create mutations for add user
+class CreateUser(graphene.Mutation):
+    class Arguments:
+        input = UserInput(required=True)
+
+    user = graphene.Field(UserType)
+
+    @staticmethod
+    def mutate(parent, info, input=None):
+        if input is None:
+            return CreateUser(user=None)
+
+        _user = User(username=input.username, email=input.email)
+        _user.set_password(input.password)
+        _user.save()
+        return CreateUser(user=_user)
 
 # create mutations for add post
 class AddPost(graphene.Mutation):
@@ -12,6 +33,8 @@ class AddPost(graphene.Mutation):
 
     post = graphene.Field(PostType)
 
+    @staticmethod
+    @login_required
     def mutate(parent, info, input=None):
         if input is None:
             return AddPost(post=None)
@@ -29,6 +52,7 @@ class UpdatePost(graphene.Mutation):
     post        = graphene.Field(PostType)
 
     @staticmethod
+    @login_required
     def mutate(parent, info, id, input=None):
         status = True
         post_instance = Post.objects.get(pk=id)
@@ -49,6 +73,7 @@ class DeletePost(graphene.Mutation):
     message     = graphene.String()
 
     @staticmethod
+    @login_required
     def mutate(parent, info, id, input=None):
         status = True
 
@@ -71,6 +96,8 @@ class AddAuthor(graphene.Mutation):
 
     author = graphene.Field(AuthorType)
 
+    @staticmethod
+    @login_required
     def mutate(parent, info, input=None):
         if input is None:
             return AddAuthor(author=None)
@@ -87,6 +114,7 @@ class UpdateAuthor(graphene.Mutation):
     author      = graphene.Field(AuthorType)
 
     @staticmethod
+    @login_required
     def mutate(parent, info, id, input=None):
         status = True
         author_instance = Author.objects.get(pk=id)
@@ -107,6 +135,7 @@ class DeleteAuthor(graphene.Mutation):
     message     = graphene.String()
 
     @staticmethod
+    @login_required
     def mutate(parent, info, id, input=None):
         status = True
 
@@ -131,6 +160,7 @@ class AddActor(graphene.Mutation):
     actor       = graphene.Field(ActorType)
 
     @staticmethod
+    @login_required
     def mutate(parent, info, input=None):
         status = True
         if input is None:
@@ -149,6 +179,7 @@ class UpdateActor(graphene.Mutation):
     actor       = graphene.Field(ActorType)
 
     @staticmethod
+    @login_required
     def mutate(parent, info, id, input=None):
         status = True
         actor_instance = Actor.objects.get(pk=id)
@@ -169,6 +200,7 @@ class DeleteActor(graphene.Mutation):
     message     = graphene.String()
 
     @staticmethod
+    @login_required
     def mutate(parent, info, id, input=None):
         status = True
 
@@ -193,7 +225,13 @@ class AddMovie(graphene.Mutation):
     movie       = graphene.Field(MovieType)
 
     @staticmethod
+    @login_required
     def mutate(parent, info, input=None):
+        user = info.context.user
+
+        if user.is_anonymous:
+            raise Exception('Not Loggedin!')
+
         status = True
         if input is None:
             status = False
@@ -206,7 +244,7 @@ class AddMovie(graphene.Mutation):
                 return AddMovie(ok=False, movie=None)
             actors.append(actor)
 
-        _movie = Movie.objects.create(title=input.title, year=input.year)
+        _movie = Movie.objects.create(title=input.title, year=input.year, user=user)
         _movie.actors.set(actors)
         return AddMovie(status=status, movie=_movie)
 
@@ -220,6 +258,7 @@ class UpdateMovie(graphene.Mutation):
     movie       = graphene.Field(MovieType)
 
     @staticmethod
+    @login_required
     def mutate(parent, info, id, input=None):
         status          = True
         movie_instance  = Movie.objects.get(pk=id)
@@ -250,6 +289,7 @@ class DeleteMovie(graphene.Mutation):
     message     = graphene.String()
 
     @staticmethod
+    @login_required
     def mutate(parent, info, id, input=None):
         status = True
         try:
@@ -281,7 +321,8 @@ class Mutation(graphene.ObjectType):
     delete_actor    = DeleteActor.Field()
     delete_movie    = DeleteMovie.Field()
 
-    register                    = mutations.Register.Field()
+    create_user                 = CreateUser.Field()
+    # register                    = mutations.Register.Field()
     verify_account              = mutations.VerifyAccount.Field()
     token_auth                  = mutations.ObtainJSONWebToken.Field()
     update_account              = mutations.UpdateAccount.Field()

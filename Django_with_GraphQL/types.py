@@ -1,7 +1,16 @@
 from graphene_django import DjangoObjectType, DjangoListField
 from home.models import Author, Post, Actor, Movie
 import graphene
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
+
+
+# Create a GraphQL type for the post model
+class UserType(DjangoObjectType):
+    class Meta:
+        model       = User
+        # fields      = ("id", )
 
 # Create a GraphQL type for the post model
 class PostType(DjangoObjectType):
@@ -20,6 +29,13 @@ class AuthorType(DjangoObjectType):
     def resolve_posts(self, info):
         return Post.objects.filter(author=self.id)
 
+# Create Input Object Types
+class UserInput(graphene.InputObjectType):
+    id              = graphene.ID()
+    username        = graphene.String(required=True)
+    email           = graphene.String(required=True)
+    password        = graphene.String(required=True)
+    
 # Create Input Object Types
 class PostInput(graphene.InputObjectType):
     id              = graphene.ID()

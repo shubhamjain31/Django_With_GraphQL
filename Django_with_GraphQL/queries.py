@@ -16,22 +16,27 @@ class Query(graphene.ObjectType):
     movies          = graphene.List(MovieType)
 
     # Resolver for feed field
+    @login_required
     def resolve_feed(parent, info):
         return Post.objects.all().order_by('created_at')
 
     # Resolver for post field
+    @login_required
     def resolve_post(parent, info, postId):
         return Post.objects.get(id=postId)
 
     # Resolver for all_authors field
+    @login_required
     def resolve_all_authors(parent, info, postId):
         return Author.objects.all()
 
     # Resolver for author field
+    @login_required
     def resolve_author(parent, info, authorId):
         return Author.objects.get(id=authorId)
 
     # Resolver for actor field
+    @login_required
     def resolve_actor(self, info, **kwargs):
         id      = kwargs.get('actorId')
         if id is not None:
@@ -39,6 +44,7 @@ class Query(graphene.ObjectType):
         return None
 
     # Resolver for movie field
+    @login_required
     def resolve_movie(self, info, **kwargs):
         id      = kwargs.get('movieId')
         if id is not None:
@@ -46,6 +52,7 @@ class Query(graphene.ObjectType):
         return None
 
     # Resolver for actors field
+    @login_required
     def resolve_actors(self, info, **kwargs):
         return Actor.objects.all()
 
