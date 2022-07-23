@@ -151,7 +151,7 @@ GRAPHQL_JWT = {
         'graphql_auth.mutations.VerifyAccount',
         'graphql_auth.mutations.ObtainJSONWebToken'
     ],
-    "JWT_VERIFY_EXPIRATION": True,
+    # "JWT_VERIFY_EXPIRATION": True,
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
 }
 

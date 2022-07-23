@@ -272,3 +272,30 @@ mutation{
     success
   }
 }
+
+# ------------------------------------------------------------@ all users @----------------------------------------------------
+query {
+  users {
+    edges {
+      node {
+        username,
+        archived,
+        verified,
+        email,
+        secondaryEmail,
+      }
+    }
+  }
+}
+
+# ------------------------------------------------------------@ user info @----------------------------------------------------
+{
+    me{
+        username
+        email
+        firstName
+        lastName
+        isStaff
+        isActive
+    }
+}

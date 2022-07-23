@@ -2,9 +2,10 @@ import graphene
 from .types import AuthorType, PostType, ActorType, MovieType
 from home.models import Author, Post, Actor, Movie
 from graphql_jwt.decorators import login_required
+from graphql_auth.schema import MeQuery, UserQuery
 
 
-class Query(graphene.ObjectType):
+class Query(UserQuery, MeQuery, graphene.ObjectType):
     feed            = graphene.List(PostType)
     post            = graphene.Field(PostType, postId=graphene.String())
     all_authors     = graphene.Field(AuthorType)

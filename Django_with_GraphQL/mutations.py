@@ -1,8 +1,6 @@
-from cmath import inf
 import graphene
 from .types import *
 
-from graphql_auth.schema import MeQuery
 from graphql_auth import mutations
 from graphql_jwt.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -36,10 +34,15 @@ class AddPost(graphene.Mutation):
     @staticmethod
     @login_required
     def mutate(parent, info, input=None):
+        user = info.context.user
+
+        if user.is_anonymous:
+            raise Exception('Not Loggedin!')
+
         if input is None:
             return AddPost(post=None)
 
-        _post = Post.objects.create(**input)
+        _post = Post.objects.create(**input, user=user)
         return AddPost(post=_post)
 
 # create mutations for update post
@@ -99,9 +102,14 @@ class AddAuthor(graphene.Mutation):
     @staticmethod
     @login_required
     def mutate(parent, info, input=None):
+        user = info.context.user
+
+        if user.is_anonymous:
+            raise Exception('Not Loggedin!')
+
         if input is None:
             return AddAuthor(author=None)
-        _author = Author.objects.create(**input)
+        _author = Author.objects.create(**input, user=user)
         return AddAuthor(author=_author)
 
 # create mutations for update author
@@ -162,11 +170,16 @@ class AddActor(graphene.Mutation):
     @staticmethod
     @login_required
     def mutate(parent, info, input=None):
+        user = info.context.user
+
+        if user.is_anonymous:
+            raise Exception('Not Loggedin!')
+
         status = True
         if input is None:
             return AddActor(actor=None)
 
-        _actor = Actor.objects.create(**input)
+        _actor = Actor.objects.create(**input, user=user)
         return AddActor(status=status, actor=_actor)
 
 # create mutations for update actor

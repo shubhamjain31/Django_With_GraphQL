@@ -6,11 +6,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-# Create a GraphQL type for the post model
+# Create a GraphQL type for the user model
 class UserType(DjangoObjectType):
     class Meta:
         model       = User
-        # fields      = ("id", )
 
 # Create a GraphQL type for the post model
 class PostType(DjangoObjectType):
