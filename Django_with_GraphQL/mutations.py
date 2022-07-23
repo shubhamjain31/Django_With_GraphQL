@@ -92,6 +92,23 @@ class DeletePost(graphene.Mutation):
         post_instance.delete()
         return DeletePost(status=status)
 
+# create mutations for bulk delete post
+class BulkDeletePost(graphene.Mutation):
+    class Arguments:
+        ids     = graphene.List(BaseBulkDelete)
+
+    status      = graphene.Boolean()
+    message     = graphene.String()
+
+    @staticmethod
+    @login_required
+    def mutate(parent, info, ids=None):
+        status = True
+
+        post_list = [Post.objects.filter(id=id.pop('id')).delete(**id) for id in ids]
+
+        return BulkDeletePost(status=status, message="Posts Deleted!")
+
 # create mutations for add author
 class AddAuthor(graphene.Mutation):
     class Arguments:
@@ -158,6 +175,23 @@ class DeleteAuthor(graphene.Mutation):
             return DeleteAuthor(status=status, message="Something Went Wrong!")
         author_instance.delete()
         return DeleteAuthor(status=status)
+
+# create mutations for bulk delete author
+class BulkDeleteAuthor(graphene.Mutation):
+    class Arguments:
+        ids     = graphene.List(BaseBulkDelete)
+
+    status      = graphene.Boolean()
+    message     = graphene.String()
+
+    @staticmethod
+    @login_required
+    def mutate(parent, info, ids=None):
+        status = True
+
+        author_list = [Author.objects.filter(id=id.pop('id')).delete(**id) for id in ids]
+
+        return BulkDeleteAuthor(status=status, message="Authors Deleted!")
 
 # create mutations for add actor
 class AddActor(graphene.Mutation):
@@ -228,6 +262,23 @@ class DeleteActor(graphene.Mutation):
             return DeleteActor(status=status, message="Something Went Wrong!")
         actor_instance.delete()
         return DeleteActor(status=status)
+
+# create mutations for bulk delete author
+class BulkDeleteActor(graphene.Mutation):
+    class Arguments:
+        ids     = graphene.List(BaseBulkDelete)
+
+    status      = graphene.Boolean()
+    message     = graphene.String()
+
+    @staticmethod
+    @login_required
+    def mutate(parent, info, ids=None):
+        status = True
+
+        author_list = [Actor.objects.filter(id=id.pop('id')).delete(**id) for id in ids]
+
+        return BulkDeleteActor(status=status, message="Actors Deleted!")
 
 # create mutations for add actor
 class AddMovie(graphene.Mutation):
@@ -317,6 +368,23 @@ class DeleteMovie(graphene.Mutation):
         movie_instance.delete()
         return DeleteMovie(status=status)
 
+# create mutations for bulk delete author
+class BulkDeleteMovie(graphene.Mutation):
+    class Arguments:
+        ids     = graphene.List(BaseBulkDelete)
+
+    status      = graphene.Boolean()
+    message     = graphene.String()
+
+    @staticmethod
+    @login_required
+    def mutate(parent, info, ids=None):
+        status = True
+
+        author_list = [Movie.objects.filter(id=id.pop('id')).delete(**id) for id in ids]
+
+        return BulkDeleteMovie(status=status, message="Movies Deleted!")
+
 # create the mutation type
 class Mutation(graphene.ObjectType):
     add_post        = AddPost.Field()
@@ -333,6 +401,11 @@ class Mutation(graphene.ObjectType):
     delete_author   = DeleteAuthor.Field()
     delete_actor    = DeleteActor.Field()
     delete_movie    = DeleteMovie.Field()
+
+    bulk_delete_post    = BulkDeletePost.Field()
+    bulk_delete_author  = BulkDeleteAuthor.Field()
+    bulk_delete_actor   = BulkDeleteActor.Field()
+    bulk_delete_movie   = BulkDeleteMovie.Field()
 
     create_user                 = CreateUser.Field()
     # register                    = mutations.Register.Field()

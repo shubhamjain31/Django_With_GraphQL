@@ -49,6 +49,10 @@ class AuthorInput(graphene.InputObjectType):
     name            = graphene.String(required=True)
     biodata         = graphene.String()
 
+# Create Input Object Types
+class BaseBulkDelete(graphene.InputObjectType):
+    id           = graphene.String(required=True)
+
 ######################################################################################################################################
 
 # Create a GraphQL type for the movie model
