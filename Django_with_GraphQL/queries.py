@@ -1,6 +1,7 @@
 import graphene
 from .types import AuthorType, PostType, ActorType, MovieType
 from home.models import Author, Post, Actor, Movie
+from graphql_jwt.decorators import login_required
 
 
 class Query(graphene.ObjectType):
@@ -49,5 +50,6 @@ class Query(graphene.ObjectType):
         return Actor.objects.all()
 
     # Resolver for movies field
+    @login_required
     def resolve_movies(self, info, **kwargs):
         return Movie.objects.all()

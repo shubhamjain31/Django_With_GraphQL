@@ -154,3 +154,6 @@ GRAPHQL_JWT = {
     "JWT_VERIFY_EXPIRATION": True,
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
 }
+
+LOGIN_URL = '/admin/'
+LOGIN_REDIRECT_URL = '/graphql'
