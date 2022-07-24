@@ -7,6 +7,8 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+# Note: Here the info.context itself the request object.
+
 # create mutations for add user
 class CreateUser(graphene.Mutation):
     class Arguments:
@@ -57,14 +59,15 @@ class UpdatePost(graphene.Mutation):
     @staticmethod
     @login_required
     def mutate(parent, info, id, input=None):
-        status = True
+        status      = True
+        ip_address  = info.context.META.get('HTTP_X_FORWARDED_FOR', info.context.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
         post_instance = Post.objects.get(pk=id)
 
         if post_instance is None:
             status = False
             return UpdatePost(status=status, post=None)
 
-        _post = Post.objects.filter(pk=id).update(**input)
+        _post = Post.objects.filter(pk=id).update(**input, ip_address = ip_address)
         return UpdatePost(status=status, post=_post)
 
 # create mutations for delete post
@@ -119,14 +122,15 @@ class AddAuthor(graphene.Mutation):
     @staticmethod
     @login_required
     def mutate(parent, info, input=None):
-        user = info.context.user
+        ip_address  = info.context.META.get('HTTP_X_FORWARDED_FOR', info.context.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
+        user        = info.context.user
 
         if user.is_anonymous:
             raise Exception('Not Loggedin!')
 
         if input is None:
             return AddAuthor(author=None)
-        _author = Author.objects.create(**input, user=user)
+        _author = Author.objects.create(**input, user=user, ip_address = ip_address)
         return AddAuthor(author=_author)
 
 # create mutations for update author
@@ -204,7 +208,8 @@ class AddActor(graphene.Mutation):
     @staticmethod
     @login_required
     def mutate(parent, info, input=None):
-        user = info.context.user
+        ip_address  = info.context.META.get('HTTP_X_FORWARDED_FOR', info.context.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
+        user        = info.context.user
 
         if user.is_anonymous:
             raise Exception('Not Loggedin!')
@@ -213,7 +218,7 @@ class AddActor(graphene.Mutation):
         if input is None:
             return AddActor(actor=None)
 
-        _actor = Actor.objects.create(**input, user=user)
+        _actor = Actor.objects.create(**input, user=user,ip_address = ip_address)
         return AddActor(status=status, actor=_actor)
 
 # create mutations for update actor
@@ -291,7 +296,8 @@ class AddMovie(graphene.Mutation):
     @staticmethod
     @login_required
     def mutate(parent, info, input=None):
-        user = info.context.user
+        ip_address  = info.context.META.get('HTTP_X_FORWARDED_FOR', info.context.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
+        user        = info.context.user
 
         if user.is_anonymous:
             raise Exception('Not Loggedin!')
@@ -308,7 +314,7 @@ class AddMovie(graphene.Mutation):
                 return AddMovie(ok=False, movie=None)
             actors.append(actor)
 
-        _movie = Movie.objects.create(title=input.title, year=input.year, user=user)
+        _movie = Movie.objects.create(title=input.title, year=input.year, user=user, ip_address = ip_address)
         _movie.actors.set(actors)
         return AddMovie(status=status, movie=_movie)
 

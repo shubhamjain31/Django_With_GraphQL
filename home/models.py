@@ -10,6 +10,7 @@ class Author(models.Model):
     name            = models.CharField(max_length=100)
     biodata         = models.TextField()
     user            = models.ForeignKey(User, on_delete=models.CASCADE)
+    ip_address      = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -21,6 +22,7 @@ class Post(models.Model):
     created_at      = models.DateField(default=now)
     author          = models.ForeignKey(Author, on_delete=models.CASCADE)
     user            = models.ForeignKey(User, on_delete=models.CASCADE)
+    ip_address      = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -31,6 +33,7 @@ class Actor(models.Model):
     name            = models.CharField(max_length=100)
     created_at      = models.DateField(default=now)
     user            = models.ForeignKey(User, on_delete=models.CASCADE)
+    ip_address      = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -44,6 +47,7 @@ class Movie(models.Model):
     year            = models.IntegerField()
     created_at      = models.DateField(default=now)
     user            = models.ForeignKey(User, on_delete=models.CASCADE)
+    ip_address      = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.title
