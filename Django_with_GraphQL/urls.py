@@ -23,5 +23,5 @@ from authentication.views import redirect_view
 urlpatterns = [
     path('', redirect_view, name='index'),
     path('admin/', admin.site.urls),
-    path('graphql', csrf_exempt(GraphQLView.as_view(graphiql=True)))
+    path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True)))
 ]
