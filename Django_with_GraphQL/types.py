@@ -80,3 +80,11 @@ class MovieInput(graphene.InputObjectType):
     year            = graphene.Int()
     created_at      = graphene.Date()
     actors          = graphene.List(ActorInput)
+
+#####################################################################################################################################
+
+# Create Input Object Types
+class LoginInput(graphene.InputObjectType):
+    # id              = graphene.ID()
+    email           = graphene.String(required=True)
+    password        = graphene.String(required=True)

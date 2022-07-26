@@ -15,11 +15,10 @@ function App() {
     <Router>
             <div>
                 <Routes>
-                    {/* <Route exact path="/" element={<Login/>} /> */}
+                    <Route exact path="/" element={<Login/>} />
                     <Route path="/login" element={<Login/>} />
                     <Route path="/register" element={<Register/>} />
                 </Routes>
-                <Login/>
                 <ToastContainer position="top-right" autoClose={2000} />
             </div>
     </Router>

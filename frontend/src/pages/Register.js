@@ -5,12 +5,13 @@ import useDocumentTitle from './useDocumentTitle';
 import { toast } from 'react-toastify';
 
 import './Common.css';
-
+import {REGISTER_MUTATION} from "../GraphQL/Mutations";
+import { useMutation } from "@apollo/client";
 
 export default function Register(props) {
     useDocumentTitle('Sign Up');
 
-    const initailvariable = {email:"", password1:"", password2:""}
+    const initailvariable = {username:"", email:"", password1:"", password2:""}
     const [user, registerUser] = useState(initailvariable)
 
     const  handleData =(event)=>{
@@ -18,10 +19,18 @@ export default function Register(props) {
         registerUser({...user, [name]:value})
     }
 
+    const [createUser, {error}] = useMutation(REGISTER_MUTATION);
+
    const loginSubmit = (event)=>{
     event.preventDefault();     
      console.log(user)
-     toast('Hello Geeks 2',{type: toast.TYPE.SUCCESS});
+     createUser({ input: {
+        email:     user.email,
+        username:  user.username,
+        password1: user.password1,
+        password2: user.password2
+    } });   
+     toast('User Register!',{type: toast.TYPE.SUCCESS});
      event.target.reset();
    }
 
@@ -30,6 +39,16 @@ export default function Register(props) {
       <form className="Auth-form" onSubmit={loginSubmit}>
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Sign Up</h3>
+          <div className="form-group mt-3">
+            <label>Username</label>
+            <input
+              type="text"
+              className="form-control mt-1"
+              placeholder="Enter username"
+              name="username"
+              onChange={handleData}
+            />
+          </div>
           <div className="form-group mt-3">
             <label>Email address</label>
             <input
