@@ -8,7 +8,7 @@ from graphql_auth.schema import MeQuery, UserQuery
 class Query(UserQuery, MeQuery, graphene.ObjectType):
     feed            = graphene.List(PostType)
     post            = graphene.Field(PostType, postId=graphene.String())
-    all_authors     = graphene.Field(AuthorType)
+    all_authors     = graphene.List(AuthorType)
     author          = graphene.Field(AuthorType, authorId=graphene.String())
 
     actor           = graphene.Field(ActorType, actorId=graphene.Int())
@@ -28,7 +28,7 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
 
     # Resolver for all_authors field
     @login_required
-    def resolve_all_authors(parent, info, postId):
+    def resolve_all_authors(parent, info, **kwargs):
         return Author.objects.all()
 
     # Resolver for author field

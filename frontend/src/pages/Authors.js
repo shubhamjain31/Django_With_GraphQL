@@ -2,16 +2,21 @@ import React, { useState } from "react";
 import useDocumentTitle from './useDocumentTitle';
 
 import './Inner.css';
+import { useQuery } from '@apollo/client';
+import {GET_AUTHORS} from "../GraphQL/Queries";
 
 import Table from 'react-bootstrap/Table';
 
 export default function Authors(props) {
     useDocumentTitle('Authors');
+
+    const { loading, error, data } = useQuery(GET_AUTHORS);
+    console.log(data.allAuthors)
    
-  return (
+  return data.allAuthors.map(({ id, name, biodata }) => (
     <div className="inner-form-container">
-      <form className="inner-form">
-        <div className="inner-form-content">
+      <div className="inner-form">
+        <div className="inner-form-content" key={id}>
           <h3 className="inner-form-title">Authors</h3>
           <Table striped bordered hover>
             <thead>
@@ -36,7 +41,7 @@ export default function Authors(props) {
             </Table>
           
         </div>
-      </form>
+      </div>
     </div>
-  )
+  ));
 }
