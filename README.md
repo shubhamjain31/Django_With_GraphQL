@@ -1,1 +1,1 @@
-# Django_With_GraphQL
+# Django_With_GraphQL + React
