@@ -12,17 +12,20 @@ User = get_user_model()
 # create mutations for add user
 class CreateUser(graphene.Mutation):
     class Arguments:
-        input = UserInput(required=True)
+        # input = UserInput(required=True)
+        username        = graphene.String(required=True)
+        email           = graphene.String(required=True)
+        password        = graphene.String(required=True)
 
     user = graphene.Field(UserType)
 
     @staticmethod
-    def mutate(parent, info, input=None):
+    def mutate(parent, info, username=None, email=None, password=None):
         if input is None:
             return CreateUser(user=None)
 
-        _user = User(username=input.username, email=input.email)
-        _user.set_password(input.password)
+        _user = User(username=username, email=email)
+        _user.set_password(password)
         _user.save()
         return CreateUser(user=_user)
 
@@ -115,13 +118,16 @@ class BulkDeletePost(graphene.Mutation):
 # create mutations for add author
 class AddAuthor(graphene.Mutation):
     class Arguments:
-        input = AuthorInput(required=True)
+        # input = AuthorInput(required=True)
+        id              = graphene.ID()
+        name            = graphene.String(required=True)
+        biodata         = graphene.String()
 
     author = graphene.Field(AuthorType)
 
     @staticmethod
     @login_required
-    def mutate(parent, info, input=None):
+    def mutate(parent, info, id=None, name=None, biodata=None):
         ip_address  = info.context.META.get('HTTP_X_FORWARDED_FOR', info.context.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
         user        = info.context.user
 
@@ -130,7 +136,8 @@ class AddAuthor(graphene.Mutation):
 
         if input is None:
             return AddAuthor(author=None)
-        _author = Author.objects.create(**input, user=user, ip_address = ip_address)
+        # _author = Author.objects.create(**input, user=user, ip_address = ip_address)
+        _author = Author.objects.create(name=name, biodata=biodata, user=user, ip_address = ip_address)
         return AddAuthor(author=_author)
 
 # create mutations for update author

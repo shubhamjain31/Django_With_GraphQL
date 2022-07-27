@@ -3,12 +3,30 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+import { getToken } from "./token";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+const httpLink = new HttpLink({ uri: 'http://localhost:8000/graphql/' });
+
+const authLink = setContext((_, { headers }) => {
+
+  // get the authentication token from local storage if it exists
+  const token = getToken();
+
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `JWT ${token}` : "",
+    }
+  }
+});
+
 const client = new ApolloClient({
-  uri: 'http://localhost:8000/graphql/',
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 

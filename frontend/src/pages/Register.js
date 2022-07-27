@@ -11,7 +11,7 @@ import { useMutation } from "@apollo/client";
 export default function Register(props) {
     useDocumentTitle('Sign Up');
 
-    const initailvariable = {username:"", email:"", password1:"", password2:""}
+    const initailvariable = {username:"", email:"", password:""}
     const [user, registerUser] = useState(initailvariable)
 
     const  handleData =(event)=>{
@@ -24,11 +24,10 @@ export default function Register(props) {
    const loginSubmit = (event)=>{
     event.preventDefault();     
      console.log(user)
-     createUser({ input: {
-        email:     user.email,
+     createUser({ variables: {
         username:  user.username,
-        password1: user.password1,
-        password2: user.password2
+        email:     user.email,
+        password:  user.password,
     } });   
      toast('User Register!',{type: toast.TYPE.SUCCESS});
      event.target.reset();
@@ -65,17 +64,7 @@ export default function Register(props) {
               type="password"
               className="form-control mt-1"
               placeholder="Enter password"
-              name="password1"
-              onChange={handleData}
-            />
-          </div>
-          <div className="form-group mt-3">
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              className="form-control mt-1"
-              placeholder="Enter confirm password"
-              name="password2"
+              name="password"
               onChange={handleData}
             />
           </div>

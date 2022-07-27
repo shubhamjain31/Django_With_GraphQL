@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useDocumentTitle from './useDocumentTitle';
 
 import './Common.css';
@@ -7,8 +7,10 @@ import './Common.css';
 import {LOGIN_MUTATION} from "../GraphQL/Mutations";
 import { useMutation } from "@apollo/client";
 
+import { saveToken } from "../token";
 
 export default function Login(props) {
+    const navigate = useNavigate();
     useDocumentTitle('Sign In');
 
     const initailvariable = {email:"", password:""}
@@ -19,17 +21,27 @@ export default function Login(props) {
         createUser({...user, [name]:value})
     }
 
-   const [tokenAuth, {error}] = useMutation(LOGIN_MUTATION);
+   const [tokenAuth, {error}] = useMutation(LOGIN_MUTATION,{
+      onCompleted: (data) => {
+        console.log(data.tokenAuth.token);
+        saveToken(data.tokenAuth.token);
+        navigate('/create-author');
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    }
+  );
 
    const loginSubmit = (event)=>{
     event.preventDefault(); 
     tokenAuth({ variables: {
-        email:    user.email.value,
-        password: user.password.value
+        email:    user.email,
+        password: user.password
     } });    
-     console.log(user)
      event.target.reset();
    }
+   
 
   return (
     <div className="Auth-form-container">

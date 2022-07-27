@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Author from './pages/Author';
+import Authors from './pages/Authors';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
                     <Route exact path="/" element={<Login/>} />
                     <Route path="/login" element={<Login/>} />
                     <Route path="/register" element={<Register/>} />
+                    <Route path="/create-author" element={<Author/>} />
+                    <Route path="authors" element={<Authors/>} />
                 </Routes>
                 <ToastContainer position="top-right" autoClose={2000} />
             </div>

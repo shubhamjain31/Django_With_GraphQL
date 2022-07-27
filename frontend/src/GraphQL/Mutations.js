@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { CreateUserType } from "../Schemas/TypeDefs/CreateUserType";
 
 export const LOGIN_MUTATION = gql`
     mutation tokenAuth($email: String!, $password: String!){
@@ -16,12 +15,24 @@ export const LOGIN_MUTATION = gql`
     `;
 
 export const REGISTER_MUTATION = gql`
-    mutation createUser($input: CreateUser!){
-        createUser(input: $input){
+    mutation createUser($username: String!, $email: String!, $password: String!){
+        createUser(username:$username, email:$email ,password:$password){
             user{
                 id
                 email
               }
+        }
+    }
+    `;
+
+export const AUTHOR_MUTATION = gql`
+    mutation addAuthor($name: String!, $biodata: String!) {
+        addAuthor(name:$name, biodata:$biodata) {
+        author{
+            id
+            name
+            biodata
+        }
         }
     }
     `;
