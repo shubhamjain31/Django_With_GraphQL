@@ -9,3 +9,13 @@ export const GET_AUTHORS = gql`
     }
   }
 `;
+
+export const GET_AUTHOR = gql`
+    query author($authorId: String) {
+        author(authorId: $authorId) {
+          id
+          name
+          biodata
+        }
+      }
+    `;

@@ -4,21 +4,30 @@ import useDocumentTitle from './useDocumentTitle';
 import './Common.css';
 
 import {AUTHOR_MUTATION} from "../GraphQL/Mutations";
-import { useMutation } from "@apollo/client";
+import {GET_AUTHOR} from "../GraphQL/Queries";
+import { useMutation, useQuery } from "@apollo/client";
 import { toast } from 'react-toastify';
+import {useParams} from 'react-router-dom';
 
 export default function Author(props) {
-    useDocumentTitle('Create Author');
+   const params = useParams();
+   const _id = params.authorId;
+   const isAddMode = !_id;
+   console.log(_id)
+   
+    useDocumentTitle('Create Author')
 
     const initailvariable = {name:"", biodata:""}
     const [user, createUser] = useState(initailvariable)
+    
+    // const { loading, error, data } = useQuery(GET_AUTHOR, { variables: { authorId:_id }});
 
     const  handleData =(event)=>{
         const {name, value} = event.target
         createUser({...user, [name]:value})
     }
 
-   const [addAuthor, {error}] = useMutation(AUTHOR_MUTATION,{
+   const [addAuthor] = useMutation(AUTHOR_MUTATION,{
       onCompleted: (data) => {
         toast('Author Added!',{type: toast.TYPE.SUCCESS});
       },
@@ -37,6 +46,12 @@ export default function Author(props) {
      event.target.reset();
    }
    
+  //  if (loading) {
+  //     return <div>Loading...</div>
+  //   }
+  //   if (error) {
+  //       return <div>Error! {error.message}</div>
+  //   }
 
   return (
     <div className="Auth-form-container">
@@ -51,6 +66,7 @@ export default function Author(props) {
               placeholder="Enter name"
               name="name"
               onChange={handleData}
+              // value={data['author'].name}
             />
           </div>
           <div className="form-group mt-3">
@@ -61,11 +77,12 @@ export default function Author(props) {
               placeholder="Enter biodata"
               name="biodata"
               onChange={handleData}
+              // value={data['author'].biodata}
             />
           </div>
           <div className="d-grid gap-2 mt-3">
             <button type="submit" className="btn btn-primary">
-              Add
+            {isAddMode ? 'Add' : 'Edit'}
             </button>
           </div>
           

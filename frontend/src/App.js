@@ -21,6 +21,7 @@ function App() {
                     <Route path="/login" element={<Login/>} />
                     <Route path="/register" element={<Register/>} />
                     <Route path="/create-author" element={<Author/>} />
+                    <Route path="/edit-author/:authorId" element={<Author/>} />
                     <Route path="authors" element={<Authors/>} />
                 </Routes>
                 <ToastContainer position="top-right" autoClose={2000} />

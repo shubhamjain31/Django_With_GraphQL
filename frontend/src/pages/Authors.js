@@ -37,7 +37,7 @@ export default function Authors(props) {
             {
                 data.allAuthors?.map((alldata, index) => {
                   return <tr key={alldata.id}><td>{index+1}</td><td>{alldata?.name}</td><td>{alldata?.biodata }</td><td>
-                    <button className="btn btn-success btn-sm px-3">Edit</button><button className="btn btn-danger my-2 btn-sm">Delete</button></td></tr>
+                    <a href={`/edit-author/${alldata.id}`} className="btn btn-success btn-sm px-3">Edit</a><button className="btn btn-danger my-2 btn-sm">Delete</button></td></tr>
             })
             }
             </tbody>
