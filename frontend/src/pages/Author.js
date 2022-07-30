@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useDocumentTitle from './useDocumentTitle';
 
 import './Common.css';
@@ -14,20 +14,20 @@ export default function Author(props) {
    const _id = params.authorId;
    const isAddMode = !_id;
    console.log(_id)
-   
-    useDocumentTitle('Create Author')
 
     const initailvariable = {name:"", biodata:""}
     const [user, createUser] = useState(initailvariable)
     
-    // const { loading, error, data } = useQuery(GET_AUTHOR, { variables: { authorId:_id }});
+    // const { loading, error, data } = useQuery(GET_AUTHOR, { variable s: { authorId:_id }});
 
     const  handleData =(event)=>{
         const {name, value} = event.target
         createUser({...user, [name]:value})
     }
 
-   const [addAuthor] = useMutation(AUTHOR_MUTATION,{
+  useDocumentTitle('Create Author');
+
+   const [addAuthor, newAuthor] = useMutation(AUTHOR_MUTATION,{
       onCompleted: (data) => {
         toast('Author Added!',{type: toast.TYPE.SUCCESS});
       },
@@ -36,6 +36,7 @@ export default function Author(props) {
       },
     }
   );
+  console.log(newAuthor.loading)
 
    const authorSubmit = (event)=>{
     event.preventDefault(); 
