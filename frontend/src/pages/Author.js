@@ -13,19 +13,18 @@ export default function Author(props) {
    const params = useParams();
    const _id = params.authorId;
    const isAddMode = !_id;
-   console.log(_id)
+
+   useDocumentTitle('Create Author');
 
     const initailvariable = {name:"", biodata:""}
     const [user, createUser] = useState(initailvariable)
     
-    // const { loading, error, data } = useQuery(GET_AUTHOR, { variable s: { authorId:_id }});
 
     const  handleData =(event)=>{
         const {name, value} = event.target
         createUser({...user, [name]:value})
     }
 
-  useDocumentTitle('Create Author');
 
    const [addAuthor, newAuthor] = useMutation(AUTHOR_MUTATION,{
       onCompleted: (data) => {
@@ -36,23 +35,56 @@ export default function Author(props) {
       },
     }
   );
-  console.log(newAuthor.loading)
 
-   const authorSubmit = (event)=>{
-    event.preventDefault(); 
-    addAuthor({ variables: {
+  
+  // console.log(isAddMode
+  //   ? 'add'
+  //   : 'edit')
+
+  //  const authorSubmit = (event)=>{
+  //   event.preventDefault(); 
+  //   addAuthor({ variables: {
+    //       name:    user.name,
+    //       biodata: user.biodata
+    //   } });    
+  //    event.target.reset();
+  //  }
+
+  function authorCreate(event){
+      event.preventDefault(); 
+      console.log('fjdkfd')
+      addAuthor({ variables: {
         name:    user.name,
         biodata: user.biodata
-    } });    
-     event.target.reset();
-   }
+      } });    
+      event.target.reset();
+    }
+    
+    function authorUpdate(event){
+      // event.preventDefault(); 
+      console.log('kjsdks')
+      // addAuthor({ variables: {
+        //     name:    user.name,
+        //     biodata: user.biodata
+        // } });    
+        // event.target.reset();
+      }
+      
+   function authorSubmit(event) {
+     return isAddMode
+     ? authorCreate(event)
+        : authorUpdate(_id, event);
+    }
    
-  //  if (loading) {
-  //     return <div>Loading...</div>
-  //   }
-  //   if (error) {
-  //       return <div>Error! {error.message}</div>
-  //   }
+  
+   const { loading, error, data } = useQuery(GET_AUTHOR, { variables : { authorId:_id }, skip: isAddMode});
+
+   if (loading) {
+      return <div>Loading...</div>
+    }
+    if (error) {
+        return <div>Error! {error.message}</div>
+    }
 
   return (
     <div className="Auth-form-container">
@@ -67,7 +99,7 @@ export default function Author(props) {
               placeholder="Enter name"
               name="name"
               onChange={handleData}
-              // value={data['author'].name}
+              value={isAddMode ? "" : data['author'].name}
             />
           </div>
           <div className="form-group mt-3">
@@ -78,7 +110,7 @@ export default function Author(props) {
               placeholder="Enter biodata"
               name="biodata"
               onChange={handleData}
-              // value={data['author'].biodata}
+              value={isAddMode ? "" : data['author'].biodata}
             />
           </div>
           <div className="d-grid gap-2 mt-3">
