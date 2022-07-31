@@ -25,9 +25,21 @@ export const REGISTER_MUTATION = gql`
     }
     `;
 
-export const AUTHOR_MUTATION = gql`
+export const Add_AUTHOR_MUTATION = gql`
     mutation addAuthor($name: String!, $biodata: String!) {
         addAuthor(name:$name, biodata:$biodata) {
+        author{
+            id
+            name
+            biodata
+        }
+        }
+    }
+    `;
+
+export const EDIT_AUTHOR_MUTATION = gql`
+    mutation updateAuthor($id: Int!, $name: String!, $biodata: String!) {
+        updateAuthor(id: $id, name:$name, biodata:$biodata) {
         author{
             id
             name

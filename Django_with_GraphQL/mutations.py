@@ -134,7 +134,7 @@ class AddAuthor(graphene.Mutation):
         if user.is_anonymous:
             raise Exception('Not Loggedin!')
 
-        if input is None:
+        if name is None or biodata is None:
             return AddAuthor(author=None)
         # _author = Author.objects.create(**input, user=user, ip_address = ip_address)
         _author = Author.objects.create(name=name, biodata=biodata, user=user, ip_address = ip_address)
@@ -144,14 +144,18 @@ class AddAuthor(graphene.Mutation):
 class UpdateAuthor(graphene.Mutation):
     class Arguments:
         id      = graphene.Int(required=True)
-        input   = AuthorInput(required=True)
+        # input   = AuthorInput(required=True)
+        name            = graphene.String(required=True)
+        biodata         = graphene.String()
 
     status      = graphene.Boolean()
     author      = graphene.Field(AuthorType)
 
     @staticmethod
     @login_required
-    def mutate(parent, info, id, input=None):
+    def mutate(parent, info, id, name=None, biodata=None):
+        ip_address  = info.context.META.get('HTTP_X_FORWARDED_FOR', info.context.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
+
         status = True
         author_instance = Author.objects.get(pk=id)
 
@@ -159,8 +163,11 @@ class UpdateAuthor(graphene.Mutation):
             status = False
             return UpdateAuthor(status=status, author=None)
 
-        _author = Author.objects.filter(pk=id).update(**input)
-        return UpdateAuthor(status=status, author=_author)
+        author_instance.name        = name
+        author_instance.biodata     = biodata
+        author_instance.ip_address  = ip_address
+        author_instance.save()
+        return UpdateAuthor(status=status, author=author_instance)
 
 # create mutations for delete author
 class DeleteAuthor(graphene.Mutation):
