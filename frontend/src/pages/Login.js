@@ -25,7 +25,7 @@ export default function Login(props) {
       onCompleted: (data) => {
         console.log(data.tokenAuth.token);
         saveToken(data.tokenAuth.token);
-        navigate('/create-author');
+        navigate('/authors');
       },
       onError: (error) => {
         console.log(error);
