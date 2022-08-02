@@ -48,3 +48,12 @@ export const EDIT_AUTHOR_MUTATION = gql`
         }
     }
     `;
+
+export const DELETE_AUTHOR_MUTATION = gql`
+    mutation deleteAuthor($id: Int!) {
+        deleteAuthor(id: $id) {
+            status
+            message
+        }
+    }
+    `;
