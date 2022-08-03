@@ -34,8 +34,10 @@ export default function Authors(props) {
     const handleDelete = () => {
       deleteAuthor({ variables: {} });   
       setShow(false);
-      console.log(data,ind)
-      data.allAuthors.splice(ind, 1)
+      console.log(newData,ind)
+      // data.allAuthors = []
+      newData.splice(ind, 1)
+      console.log(newData)
       toast('Author Deleted!',{type: toast.TYPE.SUCCESS});
     };
 
@@ -47,6 +49,7 @@ export default function Authors(props) {
         return <div>Error! {error.message}</div>
     }
 
+    const newData   = [...data.allAuthors];
    
   return (
     <div className="inner-form-container">
@@ -64,7 +67,7 @@ export default function Authors(props) {
             </thead>
             <tbody>
             {
-                data.allAuthors?.map((alldata, index) => {
+                newData?.map((alldata, index) => {
                   return <tr key={alldata.id}><td>{index+1}</td><td>{alldata?.name}</td><td>{alldata?.biodata }</td><td>
                     <a href={`/edit-author/${alldata.id}`} className="btn btn-success btn-sm px-3">Edit</a><button className="btn btn-danger my-2 btn-sm" onClick={(event) => handleShow(event, alldata?.id, index)}>Delete</button></td></tr>
             })
