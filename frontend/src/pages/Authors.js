@@ -62,7 +62,7 @@ export default function Authors(props) {
                 <th>SNo.</th>
                 <th>Name</th>
                 <th>Biodata</th>
-                <th>Action</th>
+                <th><a href={`/create-author/`} className="btn btn-info text-white btn-sm px-3">Add</a></th>
                 </tr>
             </thead>
             <tbody>
