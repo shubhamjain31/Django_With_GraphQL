@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom'
 import useDocumentTitle from './useDocumentTitle';
 
 import './Inner.css';
@@ -62,14 +63,15 @@ export default function Authors(props) {
                 <th>SNo.</th>
                 <th>Name</th>
                 <th>Biodata</th>
-                <th><a href={`/create-author/`} className="btn btn-info text-white btn-sm px-3">Add</a></th>
+                <th><Link to={`/create-author/`}><button type="button" className="btn  btn-info text-white btn-sm px-3">Add</button></Link></th>
                 </tr>
             </thead>
             <tbody>
             {
                 newData?.map((alldata, index) => {
                   return <tr key={alldata.id}><td>{index+1}</td><td>{alldata?.name}</td><td>{alldata?.biodata }</td><td>
-                    <a href={`/edit-author/${alldata.id}`} className="btn btn-success btn-sm px-3">Edit</a><button className="btn btn-danger my-2 btn-sm" onClick={(event) => handleShow(event, alldata?.id, index)}>Delete</button></td></tr>
+                    <Link to={`/edit-author/${alldata.id}`}><button type="button" className="btn btn-success btn-sm px-3">Edit</button></Link>
+                    <button className="btn btn-danger my-2 btn-sm" onClick={(event) => handleShow(event, alldata?.id, index)}>Delete</button></td></tr>
             })
             }
             </tbody>
