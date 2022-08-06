@@ -15,7 +15,7 @@ class UserType(DjangoObjectType):
 class PostType(DjangoObjectType):
     class Meta:
         model       = Post
-        fields      = ("id", "title", "content", "author", "created_at")
+        fields      = ("id", "title", "content", "author", "created_at", "user")
 
 # Create a GraphQL type for the author model
 class AuthorType(DjangoObjectType):

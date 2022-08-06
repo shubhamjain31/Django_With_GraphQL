@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Author from './pages/Author';
 import Authors from './pages/Authors';
+import Posts from './pages/Posts';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
                     <Route path="/create-author" element={<Author/>} />
                     <Route path="/edit-author/:authorId" element={<Author/>} />
                     <Route path="authors" element={<Authors/>} />
+                    <Route path="posts" element={<Posts/>} />
                 </Routes>
                 <ToastContainer position="top-right" autoClose={2000} />
             </div>

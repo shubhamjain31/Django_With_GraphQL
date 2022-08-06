@@ -7,6 +7,7 @@ from graphql_auth.schema import MeQuery, UserQuery
 
 class Query(UserQuery, MeQuery, graphene.ObjectType):
     feed            = graphene.List(PostType)
+    all_posts       = graphene.List(PostType)
     post            = graphene.Field(PostType, postId=graphene.String())
     all_authors     = graphene.List(AuthorType)
     author          = graphene.Field(AuthorType, authorId=graphene.String())
@@ -19,6 +20,11 @@ class Query(UserQuery, MeQuery, graphene.ObjectType):
     # Resolver for feed field
     @login_required
     def resolve_feed(parent, info):
+        return Post.objects.all().order_by('created_at')
+
+    # Resolver for feed field
+    @login_required
+    def resolve_all_posts(parent, info):
         return Post.objects.all().order_by('created_at')
 
     # Resolver for post field
