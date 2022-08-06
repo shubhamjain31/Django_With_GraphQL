@@ -57,3 +57,12 @@ export const DELETE_AUTHOR_MUTATION = gql`
         }
     }
     `;
+
+export const DELETE_POST_MUTATION = gql`
+    mutation deletePost($id: Int!) {
+        deletePost(id: $id) {
+            status
+            message
+        }
+    }
+    `;

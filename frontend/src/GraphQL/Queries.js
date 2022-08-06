@@ -23,6 +23,7 @@ export const GET_AUTHOR = gql`
 export const GET_POSTS = gql`
     query allPosts{
       allPosts{
+        id
         title
         content
         user{
