@@ -64,15 +64,18 @@ class AddPost(graphene.Mutation):
 # create mutations for update post
 class UpdatePost(graphene.Mutation):
     class Arguments:
-        id      = graphene.Int(required=True)
-        input   = PostInput(required=True)
+        id              = graphene.Int(required=True)
+        title           = graphene.String(required=True)
+        content         = graphene.String(required=True)
+        created_at      = graphene.Date()
+        author_id       = graphene.String(required=True, name="author")
 
     status      = graphene.Boolean()
     post        = graphene.Field(PostType)
 
     @staticmethod
     @login_required
-    def mutate(parent, info, id, input=None):
+    def mutate(parent, info, id, **kwargs):
         status      = True
         ip_address  = info.context.META.get('HTTP_X_FORWARDED_FOR', info.context.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
         post_instance = Post.objects.get(pk=id)
@@ -81,7 +84,12 @@ class UpdatePost(graphene.Mutation):
             status = False
             return UpdatePost(status=status, post=None)
 
-        _post = Post.objects.filter(pk=id).update(**input, ip_address = ip_address)
+        try:
+            author_obj = Author.objects.get(id=int(kwargs['author_id']))
+        except:
+            return AddPost(post=None)
+
+        _post = Post.objects.filter(pk=id).update(title=kwargs['title'], content=kwargs['content'], author=author_obj, ip_address = ip_address)
         return UpdatePost(status=status, post=_post)
 
 # create mutations for delete post

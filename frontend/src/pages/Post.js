@@ -58,9 +58,14 @@ export default function Author(props) {
     
   function postUpdate(event){
       event.preventDefault();
+      if(user.author_id === ''){
+        toast('Please Select Any Author',{type: toast.TYPE.ERROR});
+        return;
+      }
       editPost({ variables: {
-            name:    user.name,
-            content: user.content
+            title:   user.title,
+            content: user.content,
+            author:  user.author_id
         } });    
         event.target.reset();
         navigate('/posts')
@@ -76,20 +81,19 @@ export default function Author(props) {
   
   const authors = useQuery(GET_AUTHORS);
   const posts = useQuery(GET_POST, { variables : { postId:_id }, skip: isAddMode});
- 
   if (authors.loading) {
     return <div>Loading...</div>
   }
   if (authors.error) {
       return <div>Error! {authors.error.message}</div>
-  }
+    }
 
 
-   if (posts.loading) {
+    if (posts.loading) {
       return <div>Loading...</div>
     }
     if (posts.error) {
-        return <div>Error! {posts.error.message}</div>
+      return <div>Error! {posts.error.message}</div>
     }
 
   return (
@@ -121,7 +125,7 @@ export default function Author(props) {
           </div>
           <div className="form-group mt-3">
             <label>Author</label>
-            <Form.Select aria-label="Author" name="author_id" onChange={handleData}>
+            <Form.Select aria-label="Author" defaultValue={isAddMode ? "" : posts.data['post']['author'].id} name="author_id" onChange={handleData}>
               <option value=''>----------------Select Author---------------</option>
               {authors.data['allAuthors'].map((e, key) => {
                   return <option key={key} value={e.id}>{e.name}</option>;

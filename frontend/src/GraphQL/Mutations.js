@@ -74,12 +74,15 @@ export const Add_POST_MUTATION = gql`
     `;
 
 export const EDIT_POST_MUTATION = gql`
-    mutation updatePost($id: Int!, $title: String!, $content: String!) {
-        updatePost(id: $id, title:$title, content:$content) {
+    mutation updatePost($id: Int!, $title: String!, $content: String!, $author: String!) {
+        updatePost(id: $id, title:$title, content:$content, author: $author) {
         post{
             id
             title
             content
+            author{
+                id
+            }
         }
         }
     }
