@@ -58,6 +58,30 @@ export const DELETE_AUTHOR_MUTATION = gql`
     }
     `;
 
+export const Add_POST_MUTATION = gql`
+    mutation addPost($title: String!, $content: String!) {
+        addPost(title:$title, content:$content) {
+        post{
+            id
+            title
+            content
+        }
+        }
+    }
+    `;
+
+export const EDIT_POST_MUTATION = gql`
+    mutation updatePost($id: Int!, $title: String!, $content: String!) {
+        updatePost(id: $id, title:$title, content:$content) {
+        post{
+            id
+            title
+            content
+        }
+        }
+    }
+    `;
+
 export const DELETE_POST_MUTATION = gql`
     mutation deletePost($id: Int!) {
         deletePost(id: $id) {

@@ -1,4 +1,3 @@
-from turtle import tilt
 import graphene
 from .types import *
 
@@ -33,19 +32,14 @@ class CreateUser(graphene.Mutation):
 # create mutations for add post
 class AddPost(graphene.Mutation):
     class Arguments:
-        id              = graphene.ID()
-        title           = graphene.String(required=True)
-        content         = graphene.String(required=True)
-        created_at      = graphene.Date()
-        author_id       = graphene.String(required=True, name="author")
+        input = PostInput(required=True)
 
     post = graphene.Field(PostType)
 
     @staticmethod
     @login_required
-    def mutate(parent, info, title=None, content=None):
+    def mutate(parent, info, input=None):
         user = info.context.user
-        print(user, title, content)
 
         if user.is_anonymous:
             raise Exception('Not Loggedin!')
@@ -53,8 +47,7 @@ class AddPost(graphene.Mutation):
         if input is None:
             return AddPost(post=None)
 
-        _post = Post.objects.create(title=title, content=content, user=user)
-        print(_post)
+        _post = Post.objects.create(**input, user=user)
         return AddPost(post=_post)
 
 # create mutations for update post

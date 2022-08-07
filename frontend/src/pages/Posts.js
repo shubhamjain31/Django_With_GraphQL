@@ -35,10 +35,7 @@ export default function Authors(props) {
     const handleDelete = () => {
         deletePost({ variables: {} });   
         setShow(false);
-        console.log(newData,ind)
-        // data.allAuthors = []
         newData.splice(ind, 1)
-        console.log(newData)
         toast('Post Deleted!',{type: toast.TYPE.SUCCESS});
     };
 

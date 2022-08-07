@@ -32,3 +32,13 @@ export const GET_POSTS = gql`
       }
     }
   `;
+
+export const GET_POST = gql`
+  query post($postId: String) {
+      post(postId: $postId) {
+        id
+        title
+        content
+      }
+    }
+  `;
