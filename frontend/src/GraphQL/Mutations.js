@@ -59,12 +59,15 @@ export const DELETE_AUTHOR_MUTATION = gql`
     `;
 
 export const Add_POST_MUTATION = gql`
-    mutation addPost($title: String!, $content: String!) {
-        addPost(title:$title, content:$content) {
+    mutation addPost($title: String!, $content: String!, $author: String!) {
+        addPost(title:$title, content:$content, author: $author) {
         post{
             id
             title
             content
+            author{
+                id
+            }
         }
         }
     }

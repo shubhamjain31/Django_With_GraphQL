@@ -43,18 +43,22 @@ class AddPost(graphene.Mutation):
 
     @staticmethod
     @login_required
-    def mutate(parent, info, title=None, content=None):
+    def mutate(parent, info, **kwargs):
         user = info.context.user
-        print(user, title, content)
-
+        ip_address  = info.context.META.get('HTTP_X_FORWARDED_FOR', info.context.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
+        
         if user.is_anonymous:
             raise Exception('Not Loggedin!')
 
-        if input is None:
+        if kwargs['title'] is None or kwargs['content'] is None or kwargs['author_id'] is None or kwargs['author_id'] == '':
             return AddPost(post=None)
 
-        _post = Post.objects.create(title=title, content=content, user=user)
-        print(_post)
+        try:
+            author_obj = Author.objects.get(id=int(kwargs['author_id']))
+        except:
+            return AddPost(post=None)
+        
+        _post = Post.objects.create(title=kwargs['title'], content=kwargs['content'], author=author_obj, user=user, ip_address=ip_address)
         return AddPost(post=_post)
 
 # create mutations for update post

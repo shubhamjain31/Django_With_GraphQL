@@ -20,7 +20,7 @@ export default function Author(props) {
 
    useDocumentTitle(isAddMode ? 'Create Post' : 'Edit Post');
 
-    const initailvariable = {title:"", content:""}
+    const initailvariable = {title:"", content:"", author_id: ""}
     const [user, createNewPost] = useState(initailvariable)
     
 
@@ -44,9 +44,14 @@ export default function Author(props) {
 
   function postCreate(event){
       event.preventDefault(); 
+      if(user.author_id === ''){
+        toast('Please Select Any Author',{type: toast.TYPE.ERROR});
+        return;
+      }
       addPost({ variables: {
         title:    user.title,
-        content: user.content
+        content:  user.content,
+        author:   user.author_id
       } });    
       event.target.reset();
     }
@@ -71,7 +76,6 @@ export default function Author(props) {
   
   const authors = useQuery(GET_AUTHORS);
   const posts = useQuery(GET_POST, { variables : { postId:_id }, skip: isAddMode});
-  console.log(authors.data,'lfkl')
  
   if (authors.loading) {
     return <div>Loading...</div>
@@ -117,11 +121,11 @@ export default function Author(props) {
           </div>
           <div className="form-group mt-3">
             <label>Author</label>
-            <Form.Select aria-label="Author">
-              {/* <option>Open this select menu</option> */}
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <Form.Select aria-label="Author" name="author_id" onChange={handleData}>
+              <option value=''>----------------Select Author---------------</option>
+              {authors.data['allAuthors'].map((e, key) => {
+                  return <option key={key} value={e.id}>{e.name}</option>;
+              })}
             </Form.Select>
           </div>
           <div className="d-grid gap-2 mt-3">
