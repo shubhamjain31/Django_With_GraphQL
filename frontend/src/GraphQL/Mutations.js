@@ -96,3 +96,27 @@ export const DELETE_POST_MUTATION = gql`
         }
     }
     `;
+
+export const Add_ACTOR_MUTATION = gql`
+    mutation createActor($name: String!) {
+        createActor(name:$name) {
+        actor{
+            id
+            name
+            createdAt
+        }
+        }
+    }
+    `;
+
+export const EDIT_ACTOR_MUTATION = gql`
+    mutation updateActor($id: Int!, $name: String!) {
+        updateActor(id: $id, name:$name) {
+        actor{
+            id
+            name
+            createdAt
+        }
+        }
+    }
+    `;

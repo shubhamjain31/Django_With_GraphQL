@@ -12,6 +12,8 @@ import Author from './pages/Author';
 import Authors from './pages/Authors';
 import Posts from './pages/Posts';
 import Post from './pages/Post';
+import Actors from './pages/Actors';
+import Actor from './pages/Actor';
 
 function App() {
   return (
@@ -27,6 +29,9 @@ function App() {
                     <Route path="posts" element={<Posts/>} />
                     <Route path="/create-post" element={<Post/>} />
                     <Route path="/edit-post/:postId" element={<Post/>} />
+                    <Route path="actors" element={<Actors/>} />
+                    <Route path="/create-actor" element={<Actor/>} />
+                    <Route path="/edit-actor/:actorId" element={<Actor/>} />
                 </Routes>
                 <ToastContainer position="top-right" autoClose={2000} />
             </div>

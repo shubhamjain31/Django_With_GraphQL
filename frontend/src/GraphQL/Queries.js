@@ -45,3 +45,23 @@ export const GET_POST = gql`
       }
     }
   `;
+
+export const GET_ACTORS = gql`
+  query actors{
+    actors{
+      id
+      name
+      createdAt
+    }
+  }
+`;
+
+export const GET_ACTOR = gql`
+  query actor($actorId: Int) {
+      actor(actorId: $actorId) {
+        id
+        name
+        createdAt
+      }
+    }
+  `;

@@ -1,4 +1,5 @@
 from turtle import tilt
+from unicodedata import name
 import graphene
 from .types import *
 
@@ -233,14 +234,17 @@ class BulkDeleteAuthor(graphene.Mutation):
 # create mutations for add actor
 class AddActor(graphene.Mutation):
     class Arguments:
-        input = ActorInput(required=True)
+        # input = ActorInput(required=True)
+        id              = graphene.ID()
+        name            = graphene.String(required=True)
+        created_at      = graphene.Date()
 
     status      = graphene.Boolean()
     actor       = graphene.Field(ActorType)
 
     @staticmethod
     @login_required
-    def mutate(parent, info, input=None):
+    def mutate(parent, info, **kwargs):
         ip_address  = info.context.META.get('HTTP_X_FORWARDED_FOR', info.context.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
         user        = info.context.user
 
@@ -251,21 +255,23 @@ class AddActor(graphene.Mutation):
         if input is None:
             return AddActor(actor=None)
 
-        _actor = Actor.objects.create(**input, user=user,ip_address = ip_address)
+        _actor = Actor.objects.create(name=kwargs['name'], user=user,ip_address = ip_address)
         return AddActor(status=status, actor=_actor)
 
 # create mutations for update actor
 class UpdateActor(graphene.Mutation):
     class Arguments:
         id      = graphene.Int(required=True)
-        input   = ActorInput(required=True)
+        # id              = graphene.ID()
+        name            = graphene.String(required=True)
+        created_at      = graphene.Date()
 
     status      = graphene.Boolean()
     actor       = graphene.Field(ActorType)
 
     @staticmethod
     @login_required
-    def mutate(parent, info, id, input=None):
+    def mutate(parent, info, id, **kwargs):
         status = True
         actor_instance = Actor.objects.get(pk=id)
 
@@ -273,8 +279,9 @@ class UpdateActor(graphene.Mutation):
             status = False
             return UpdateActor(status=status, actor=None)
 
-        _actor = Actor.objects.filter(pk=id).update(**input)
-        return UpdateActor(status=status, actor=_actor)
+        actor_instance.name = kwargs['name']
+        actor_instance.save()
+        return UpdateActor(status=status, actor=actor_instance)
 
 # create mutations for delete actor
 class DeleteActor(graphene.Mutation):
